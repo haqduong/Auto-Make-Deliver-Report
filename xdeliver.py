@@ -242,26 +242,33 @@ def main():
                 directory = create_folder(patch_name, topic.bp)
                 os.chdir("/".join([os.getcwd(), directory]))
                 patch_name = None
-            if len(patch_urls) == 1:
-                create_file(patch_name, name, patch_urls[1], (
-                    p.patchsets[1].raw['sizeInsertions'],
-                    p.patchsets[1].raw['sizeDeletions'],
-                    p.raw['commitMessage'].
-                        split('Change-Id')[0].replace('\n', ' ')))
-            else:
-                directory = create_folder(patch_name, name,
-                                          p.raw['commitMessage'].
-                                          split('Change-Id')[0].replace('\n',
-                                                                        ' '))
-                os.chdir("/".join([os.getcwd(), directory]))
-                tmp_name = name
-                if topic.bug and topic.change:
-                    tmp_name = topic.bug + '_' + topic.change
-                for patch_num, patch_url in patch_urls.iteritems():
-                    create_file(None, tmp_name, patch_url, (
-                        p.patchsets[patch_num].raw['sizeInsertions'],
-                        p.patchsets[patch_num].raw['sizeDeletions']),
-                                patch_num=patch_num)
+            patch_urls_count = len(patch_urls)
+            create_file(patch_name, name, patch_urls[patch_urls_count], (
+                p.patchsets[patch_urls_count].raw['sizeInsertions'],
+                p.patchsets[patch_urls_count].raw['sizeDeletions'],
+                p.raw['commitMessage'].
+                    split('Change-Id')[0].replace('\n', ' ')),
+                patch_num=patch_urls_count)
+            #if len(patch_urls) == 1:
+            #    create_file(patch_name, name, patch_urls[1], (
+            #        p.patchsets[1].raw['sizeInsertions'],
+            #        p.patchsets[1].raw['sizeDeletions'],
+            #        p.raw['commitMessage'].
+            #            split('Change-Id')[0].replace('\n', ' ')))
+            #else:
+            #    directory = create_folder(patch_name, name,
+            #                              p.raw['commitMessage'].
+            #                              split('Change-Id')[0].replace('\n',
+            #                                                            ' '))
+            #    os.chdir("/".join([os.getcwd(), directory]))
+            #    tmp_name = name
+            #    if topic.bug and topic.change:
+            #        tmp_name = topic.bug + '_' + topic.change
+            #    for patch_num, patch_url in patch_urls.iteritems():
+            #        create_file(None, tmp_name, patch_url, (
+            #            p.patchsets[patch_num].raw['sizeInsertions'],
+            #            p.patchsets[patch_num].raw['sizeDeletions']),
+            #                    patch_num=patch_num)
     LF.close()
     LOG.info("|_ FIN!")
 
